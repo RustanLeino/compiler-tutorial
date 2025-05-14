@@ -17,6 +17,14 @@ which provides both immutable datatypes (which are useful for working with AST d
 compilers) and mutable objects (which are useful when giving an identity to declarations
 of procedures, types, and variables).
 
+## Viewing and building the compiler
+
+The best way to view the sources is with the Dafny extension for VS Code. In VS Code, open the
+folder containing this repository. (If you haven't already installed the Dafny extension, VS Code
+should prompt you to install it when you open one of the `.dfy` files.)
+
+There is also a `Makefile` with targets for building, verifying, and running the code.
+
 ## Overview of compiler pipeline
 
 ```
