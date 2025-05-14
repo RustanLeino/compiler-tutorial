@@ -1,18 +1,19 @@
 # compiler-tutorial
 
-A simple compiler pipeline, from parsing to running target code. It shows how a text file
+This repo contains a simple compiler pipeline, from parsing to running target code. Its purpose
+is to be a tutorial of the various stages of a common compiler pipeline. It shows how a text file
 (that is, a stream of characters) is turned into assembly instructions that can be executed
 on a machine.
 
-This tutorial compiler uses a toy language that illustrates imperative programs with control
+The tutorial compiler uses a toy language that illustrates imperative programs with control
 flow (`if` statements, but no loops) and procedure calls.
 
 To be self-contained, the tutorial also defines the machine that executes the assembly
 instructions. In fact, it defines two machines, one more abstract and the other more
 representative of traditional CPU hardware.
 
-The compiler pipeline is implemented in the programming language Dafny, which provides
-both immutable datatypes (which are useful for working with AST data structures in
+The compiler pipeline is implemented in the programming language [Dafny](https://github.com/dafny-lang/dafny),
+which provides both immutable datatypes (which are useful for working with AST data structures in
 compilers) and mutable objects (which are useful when giving an identity to declarations
 of procedures, types, and variables).
 
@@ -75,17 +76,18 @@ control-flow graph (CFG) (defined in Cfg.dfy and runnable on a Machine, see Mach
 \--------------------------------/
     |
     v
-sequence of machine instructions (assembly code) (defined in RawAsts.dfy and runnable on a RawMachine, see RawMachine.dfy)
+sequence of machine instructions (assembly code) (defined in RawAsts.dfy and runnable on
+a RawMachine, see RawMachine.dfy)
 ```
 
 ## The stages
 
-The stages are described as follows. In the tutorial compiler, these stages are all called from `Main.dfy`.
+The stages in the compiler pipeline are described as follows. In the tutorial compiler, these stages are all called from `Main.dfy`.
 
 ### Lexer (`Lexer.dfy`)
 
-The role of the `_lexer_ is to convert a sequence of characters to a sequence of tokens.
-The Lexer discards comments (starting with `//` and going to the end of the current line)
+The role of the _lexer_ is to convert a sequence of characters to a sequence of tokens.
+The `Lexer` discards comments (starting with `//` and going to the end of the current line)
 in the input.
 
 ### Parser (`Parser.dfy`)
@@ -130,9 +132,9 @@ Notes:
   production.
 * `if` statements in the abstract syntax tree always have an `else` branch, whereas
   the concrete syntax may omit it.
-* The breakdown of expressions into several productions (`Expr`, `ArithExpr`, `AtomicExpr`),
+* By factoring expressions into several productions (`Expr`, `ArithExpr`, `AtomicExpr`),
   the grammar encodes the relative precedence levels of operators.
-* There is a difference in how `<=` and `-` expressions are parsed. The comparison
+* There is a difference in how `<=` and `-` expressions are parsed. The comparison `<=`
   is not associative, so parsing it is simple. The `-` operator is associative, so
   parsing it involves recursion. Because it is left-associative, the corresponding
   grammar production looks like it starts with a recursive call. Implementing it
@@ -145,7 +147,7 @@ Notes:
 
 The responsibility of the _resolver_ is to perform name resolution. This means figuring out
 what identifiers appearing in the program refer to. In this way, the `Resolver` turns a
-`RawAST` into a ("resolved") `AST`.
+`RawAST` into a (resolved) `AST`.
 
 Local variables are in scope until the end of the enclosing `BlockStmt`. An inner scope
 (that is, a `BlockStmt` inside another) is allowed to declare a variable with the same name
@@ -154,7 +156,7 @@ one in the outer scope, from the point of declaration until the end of the inner
 
 The resolver creates a unique identity for every procedure declaration, parameter declaration,
 and variable declaration. This is a great use of class instances (that is, _objects_) in the
-implementation, because the AST can then includes _references_ (that is, pointers) to those
+implementation, because the AST can then include _references_ (that is, pointers) to those
 class instances. Some of those class instances also include mutable fields, which will be
 filled in or changed during later stages of the compiler pipeline.
 
@@ -163,7 +165,7 @@ variables as being mutable.
 
 For more complicated input languages, it may be necessary to combine name resolution and
 type checking, or even type inference. But in this simple language, the types that are needed
-by Resolver are immidiately evident from the syntax.
+by Resolver are immediately evident from the syntax.
 
 ### Type checker (`TypeChecker.dfy`)
 
@@ -174,11 +176,11 @@ to local variables) are assigned.
 
 ### Simplifier (`Simplifier.dfy`)
 
-The _simplifier_ demonstrates a simple analysis and optimization that can be
+The _simplifier_ demonstrates a simple static analysis and optimization that can be
 done to the AST. In particular:
 
-* If the occurrence of a variable in an expression can only hold one value at
-  that time, then that occurrence of the variable is replaced by the value.
+* If an occurrence of a variable in an expression can be determined to always have
+  a fixed value, then that occurrence of the variable is replaced by the value.
   This is known as _constant propagation_.
 * If the operands of an expression are literals, then the expression is
   replaced by the result of applying the operator to those literal arguments.
@@ -202,7 +204,7 @@ variable declarations.
 A slightly more advanced version of constant propagation is to keep track
 of ranges of values that variables can have.
 
-The static analysis performance by constant propagation and range analysis are
+The static analysis performed by constant propagation and range analysis are
 examples of _abstract interpretation_. Since there are no loops in this simple
 input language, the abstract interpretation can be done using a single pass.
 In languages with loops (or to perform interprocedural analysis), the abstract
@@ -210,13 +212,13 @@ interpretation iterates until it reaches a fixpoint.
 
 ### Compiler (`Compiler.dfy`)
 
-This module translates AST into a _control-flow graph_ (CFG). This involves creating
+This stage translates an AST into a _control-flow graph_ (CFG). This involves creating
 basic blocks and the instructions inside basic blocks. The result can be executed
 on a `Machine`, which is a somewhat abstract definition of a hardware machine.
 
 ### Assembler (`Assembler.dfy`)
 
-The _assembler_ translates a CFG program into assembly for the `RawMachine`, which is
+The _assembler_ translates a CFG program into assembly code for the `RawMachine`, which is
 representative of a traditional CPU and its machine language.
 
 This translation could be done straight from the AST, in a way similar to how the CFG
@@ -259,7 +261,7 @@ detects otherwise, it returns a failure. (With more work, one would want to prov
 
 * `Cfg.dfy` defines control-flow graphs (CFGs). These can be printed using the code in `CfgPrinter.dfy`
 
-    This module declares the data structure for a Control-Flow Graph. The vertices of a CFG are
+    This module declares the data structure for a control-flow graph. The vertices of a CFG are
     _basic blocks_, each of which contains a list of instructions. In this way, a CFG is
     usually a piece of straightline code with no internal jumps. The CFG here is a slight
     variation thereof, where the almost-straightline code can include conditional jumps.
@@ -276,7 +278,7 @@ detects otherwise, it returns a failure. (With more work, one would want to prov
   program by `AsmPrinter.dfy`.
 
     The `RawMachine` is a primitive machine for program execution. Unlike the slightly more
-    abstract `Machine`, `RawMachine` does not have call stack. Instead, all operations are performed
+    abstract `Machine`, `RawMachine` does not have a call stack. Instead, all operations are performed
     on a single evaluation stack. Moreover, while the `Machine` directly makes use of `Variable`,
     `BasicBlock`, and `Procedure` declarations, the `RawMachine` instead just uses integer indices
     into the global code area or indices into the global evaluation stack. These indices are
@@ -317,7 +319,7 @@ analogous _three-address codes_.
 ### The more realistic machine (`RawMachine.dfy`)
 
 The `RawMachine` is a primitive machine for program execution. Unlike the slightly more
-abstract `Machine`, `RawMachine` does not have call stack. Instead, all operations are performed
+abstract `Machine`, `RawMachine` does not have a call stack. Instead, all operations are performed
 on a single evaluation stack. Moreover, while the `Machine` directly makes use of `Variable`,
 `BasicBlock`, and `Procedure` declarations, the `RawMachine` instead just uses integer indices
 into the global code area or indices into the global evaluation stack. These indices are
@@ -325,14 +327,15 @@ computed by the `Assembler`.
 
 Its instruction set is
 
-|-----------|---------------------------------------------------------------|
-| `HALT`    | halts execution of the machine |
-| `PUSH x`  | pushes `x` onto the stack |
-| `ADJ x`   | adjusts the stack pointer by `x` (e.g., `ADJ 1` has the effect of popping the top of the stack) |
-| `LOAD x`  | reads the value at offset `x` from the stack pointer and pushes it onto the stack (e.g., `LOAD 1` duplicates the top element) |
-| `STOR x`  | pops the top element of the stack (say, `s`) and then stores `s` at offset `x` from the new stack pointer |
-| `JMP x`   | sets the program counter to `x` |
-| `IJMP`    | pops the top element of the stack (say, `s`) and sets the program counter to `s` |
-| `JMPZ x`  | pops the top element of the stack (say, `s`) and, if `s==0`, sets the program counter to `x` |
-| `SUB`     | replaces the top two elements of the stack (say, `s` and `t`) with `s - t` |
-| `CMP`     | replaces the top two elements of the stack (say, `s` and `t`) with `1` if `s <= t` and with `0` otherwise |
+| instruction | description |
+|-------------|---------------------------------------------------------------|
+| `HALT`      | halts execution of the machine |
+| `PUSH x`    | pushes `x` onto the stack |
+| `ADJ x`     | adjusts the stack pointer by `x` (e.g., `ADJ 1` has the effect of popping the top of the stack) |
+| `LOAD x`    | reads the value at offset `x` from the stack pointer and pushes it onto the stack (e.g., `LOAD 1` duplicates the top element) |
+| `STOR x`    | pops the top element of the stack (say, `s`) and then stores `s` at offset `x` from the new stack pointer |
+| `JMP x`     | sets the program counter to `x` |
+| `IJMP`      | pops the top element of the stack (say, `s`) and sets the program counter to `s` |
+| `JMPZ x`    | pops the top element of the stack (say, `s`) and, if `s==0`, sets the program counter to `x` |
+| `SUB`       | replaces the top two elements of the stack (say, `s` and `t`) with `s - t` |
+| `CMP`       | replaces the top two elements of the stack (say, `s` and `t`) with `1` if `s <= t` and with `0` otherwise |
