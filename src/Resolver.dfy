@@ -1,6 +1,6 @@
 // The responsibility of the Resolver is to perform name resolution. This means figuring out
 // what identifiers appearing in the program refer to. In this way, the Resolver turns a
-// RawAST into a ("resolved") AST.
+// RawAST into a (resolved) AST.
 //
 // Local variables are in scope until the end of the enclosing BlockStmt. An inner scope
 // (that is, a BlockStmt inside another) is allowed to declare a variable with the same name
@@ -9,7 +9,7 @@
 //
 // The resolver creates a unique identity for every procedure declaration, parameter declaration,
 // and variable declaration. This is a great use of class instances (that is, _objects_) in the
-// implementation, because the AST can then includes _references_ (that is, pointers) to those
+// implementation, because the AST can then include _references_ (that is, pointers) to those
 // class instances. Some of those class instances also include mutable fields, which will be
 // filled in or changed during later stages of the compiler pipeline.
 //
@@ -18,7 +18,7 @@
 //
 // For more complicated input languages, it may be necessary to combine name resolution and
 // type checking, or even type inference. But in this simple language, the types that are needed
-// by Resolver are immidiately evident from the syntax.
+// by Resolver are immediately evident from the syntax.
 
 module Resolver {
   export

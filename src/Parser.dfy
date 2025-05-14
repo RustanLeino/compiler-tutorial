@@ -34,9 +34,9 @@
 //     production.
 //   * "if" statements in the abstract syntax tree always have an "else" branch, whereas
 //     the concrete syntax may omit it.
-//   * The breakdown of expressions into several productions (Expr, ArithExpr, AtomicExpr),
+//   * By factoring expressions into several productions (Expr, ArithExpr, AtomicExpr),
 //     the grammar encodes the relative precedence levels of operators.
-//   * There is a difference in how "<=" and "-" expressions are parsed. The comparison
+//   * There is a difference in how "<=" and "-" expressions are parsed. The comparison `<=`
 //     is not associative, so parsing it is simple. The "-" operator is associative, so
 //     parsing it involves recursion. Because it is left-associative, the corresponding
 //     grammar production looks like it starts with a recursive call. Implementing it

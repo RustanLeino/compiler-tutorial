@@ -1,5 +1,5 @@
 // The RawMachine is a primitive machine for program execution. Unlike the slightly more
-// abstract Machine, RawMachine does not have call stack. Instead, all operations are performed
+// abstract Machine, RawMachine does not have a call stack. Instead, all operations are performed
 // on a single evaluation stack. Moreover, while the Machine directly makes use of Variable,
 // BasicBlock, and Procedure declarations, the RawMachine instead just uses integer indices
 // into the global code area or indices into the global evaluation stack. These indices are

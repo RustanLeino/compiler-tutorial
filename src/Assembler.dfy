@@ -1,4 +1,4 @@
-// The Assembler translates a CFG program into assembly for the RawMachine.
+// The Assembler translates a CFG program into assembly code for the RawMachine.
 //
 // This translation could be done straight from the AST, in a way similar to how the CFG
 // program is constructed by the Compiler. However, translating to RawMachine is more

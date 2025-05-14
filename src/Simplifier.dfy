@@ -1,7 +1,7 @@
-// The Simplifier demonstrates a simple analysis and optimization that can be
+// The Simplifier demonstrates a simple static analysis and optimization that can be
 // done to the AST. In particular:
-//   * If the occurrence of a variable in an expression can only hold one value at
-//     that time, then that occurrence of the variable is replaced by the value.
+//   * If an occurrence of a variable in an expression can be determined to always have
+//     a fixed value, then that occurrence of the variable is replaced by the value.
 //     This is known as _constant propagation_.
 //   * If the operands of an expression are literals, then the expression is
 //     replaced by the result of applying the operator to those literal arguments.
@@ -25,7 +25,7 @@
 // A slightly more advanced version of constant propagation is to keep track
 // of ranges of values that variables can have.
 //
-// The static analysis performance by constant propagation and range analysis are
+// The static analysis performed by constant propagation and range analysis are
 // examples of _abstract interpretation_. Since there are no loops in this simple
 // input language, the abstract interpretation can be done using a single pass.
 // In languages with loops (or to perform interprocedural analysis), the abstract

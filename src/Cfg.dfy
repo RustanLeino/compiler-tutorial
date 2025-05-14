@@ -1,4 +1,4 @@
-// CFG declares the data structure for a Control-Flow Graph. The vertices of a CFG are
+// CFG declares the data structure for a control-flow graph. The vertices of a CFG are
 // _basic blocks_, each of which contains a list of instructions. In this way, a CFG is
 // usually a piece of straightline code with no internal jumps. The CFG here is a slight
 // variation thereof, where the almost-straightline code can include conditional jumps.
