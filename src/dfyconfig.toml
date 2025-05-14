@@ -1,0 +1,6 @@
+includes = ["**/*.dfy", "extern/*.cs"]
+
+[options]
+type-system-refresh = true
+general-traits = "datatype"
+general-newtypes = true
